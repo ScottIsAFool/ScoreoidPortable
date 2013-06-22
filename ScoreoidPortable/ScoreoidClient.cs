@@ -496,42 +496,4 @@ namespace ScoreoidPortable
 
         #endregion
     }
-
-    public enum SortBy
-    {
-        [Description("date")]
-        Date,
-        [Description("score")]
-        Score,
-        [Description("date,score")]
-        DateThenScore,
-        [Description("score,date")]
-        ScoreThenDate
-    }
-
-    public enum OrderBy
-    {
-        [Description("asc")]
-        Ascending,
-        [Description("desc")]
-        Descending,
-        [Description("asc,asc")]
-        AscendingAscending,
-        [Description("asc,desc")]
-        AscendingDescending,
-        [Description("desc,desc")]
-        DescendingDescending,
-        [Description("desc,asc")]
-        DescendingAscending
-    }
-
-    internal class Description : Attribute
-    {
-        public string Text;
-
-        public Description(string text)
-        {
-            Text = text;
-        }
-    }
 }
