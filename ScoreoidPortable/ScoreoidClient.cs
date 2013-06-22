@@ -48,6 +48,14 @@ namespace ScoreoidPortable
 
         #region Public methods
         #region Other methods
+        /// <summary>
+        /// Signs the in async.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password. [Optional]</param>
+        /// <returns>True if credentials were correct</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">username;Username cannot be null or empty</exception>
         public async Task<bool> SignInAsync(string username, string password = null)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
@@ -71,10 +79,10 @@ namespace ScoreoidPortable
         /// <summary>
         /// Gets the player count.
         /// </summary>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <param name="platform">The platform.</param>
-        /// <param name="difficulty">The difficulty.</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <param name="difficulty">The difficulty. [Optional]</param>
         /// <returns>The number of players based on the criteria given</returns>
         /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
         public async Task<int> GetPlayerCountAsync(DateTime? startDate = null, DateTime? endDate = null, string platform = null, int difficulty = 0)
@@ -110,6 +118,13 @@ namespace ScoreoidPortable
             return response.PlayerCount;
         }
 
+        /// <summary>
+        /// Gets the player async.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns>Returns the given player's information</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">username;Username cannot be null or empty</exception>
         public async Task<Player> GetPlayerAsync(string username)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
@@ -230,10 +245,10 @@ namespace ScoreoidPortable
         /// Gets the player rank async.
         /// </summary>
         /// <param name="username">The username.</param>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <param name="platform">The platform.</param>
-        /// <param name="difficulty">The difficulty.</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <param name="difficulty">The difficulty. [Optional]</param>
         /// <returns>
         /// The specified player's rank
         /// </returns>
@@ -314,6 +329,14 @@ namespace ScoreoidPortable
 
         #region Private methods
 
+        /// <summary>
+        /// Gets the player from query async.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="emailAddress">The email address.</param>
+        /// <param name="isLogin">if set to <c>true</c> [is login].</param>
+        /// <returns>An array of player responses</returns>
         private async Task<PlayerResponse[]> GetPlayerFromQueryAsync(string username, string password, string emailAddress, bool isLogin = false)
         {
             var postData = CreatePostData();
@@ -335,11 +358,25 @@ namespace ScoreoidPortable
             return await PostData<PlayerResponse[]>(postData, "getPlayer", isLogin);
         }
 
+        /// <summary>
+        /// Gets the scoreoid URI.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <returns>The scoreoid API URI</returns>
         private static string GetScoreoidUri(string method)
         {
             return string.Format("{0}{1}", ScoreoidEndpoint, method);
         }
-        
+
+        /// <summary>
+        /// Posts the data.
+        /// </summary>
+        /// <typeparam name="T">The requested Type</typeparam>
+        /// <param name="postData">The post data.</param>
+        /// <param name="methodName">Name of the method.</param>
+        /// <param name="suppressException">if set to <c>true</c> [suppress exception].</param>
+        /// <returns>The request deserialized item</returns>
+        /// <exception cref="ScoreoidException"></exception>
         private async Task<T> PostData<T>(Dictionary<string, string> postData, string methodName, bool suppressException = false)
         {
             var url = GetScoreoidUri(methodName);
@@ -364,6 +401,10 @@ namespace ScoreoidPortable
             return returnObject;
         }
 
+        /// <summary>
+        /// Creates the post data.
+        /// </summary>
+        /// <returns>The default post data information that's in every API call</returns>
         private Dictionary<string, string> CreatePostData()
         {
             var postData = new Dictionary<string, string>();
