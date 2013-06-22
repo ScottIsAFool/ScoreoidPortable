@@ -68,6 +68,15 @@ namespace ScoreoidPortable
 
         #region Player methods
 
+        /// <summary>
+        /// Gets the player count.
+        /// </summary>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="difficulty">The difficulty.</param>
+        /// <returns>The number of players based on the criteria given</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
         public async Task<int> GetPlayerCountAsync(DateTime? startDate = null, DateTime? endDate = null, string platform = null, int difficulty = 0)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
@@ -118,6 +127,13 @@ namespace ScoreoidPortable
             return users != null && users.Any() ? users[0].Player : null;
         }
 
+        /// <summary>
+        /// Deletes the player.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns>True if the player has been deleted</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">username;Username cannot be null or empty</exception>
         public async Task<bool> DeletePlayerAsync(string username)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
@@ -138,6 +154,17 @@ namespace ScoreoidPortable
             return response != null;
         }
 
+        /// <summary>
+        /// Creates the player.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        /// <returns>True if the player was created successfully</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// player;Player cannot be null
+        /// or
+        /// player;Username cannot be null or empty
+        /// </exception>
         public async Task<bool> CreatePlayerAsync(Player player)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
@@ -163,6 +190,17 @@ namespace ScoreoidPortable
             return response != null;
         }
 
+        /// <summary>
+        /// Edits the player async.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        /// <returns>True if the player was successfully edited</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// player;Player cannot be null
+        /// or
+        /// player;Username cannot be null or empty
+        /// </exception>
         public async Task<bool> EditPlayerAsync(Player player)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
@@ -188,7 +226,20 @@ namespace ScoreoidPortable
             return response != null;
         }
 
-        public async Task<int> GetPlayerRankAsync(string username)
+        /// <summary>
+        /// Gets the player rank async.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="difficulty">The difficulty.</param>
+        /// <returns>
+        /// The specified player's rank
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">username;Username cannot be null or empty</exception>
+        public async Task<int> GetPlayerRankAsync(string username, DateTime? startDate = null, DateTime? endDate = null, string platform = null, int difficulty = 0)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
             {
@@ -203,10 +254,31 @@ namespace ScoreoidPortable
             var postData = CreatePostData();
             postData["username"] = username;
 
+            if (startDate.HasValue)
+            {
+                postData["start_date"] = startDate.Value.ToString("YYY-MM-DD");
+            }
+
+            if (endDate.HasValue)
+            {
+                postData["end_date"] = endDate.Value.ToString("YYY-MM-DD");
+            }
+
+            if (!string.IsNullOrEmpty(platform))
+            {
+                postData["platform"] = platform;
+            }
+
+            if (difficulty > 0)
+            {
+                postData["difficulty"] = difficulty.ToString();
+            }
+
             var response = await PostData<PlayerRankResponse>(postData, "getPlayerRank");
 
             return response.Rank;
         }
+
         /// <summary>
         /// Gets the player scores async.
         /// </summary>
