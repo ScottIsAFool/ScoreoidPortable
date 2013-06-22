@@ -44,6 +44,7 @@
     <Compile Include="Entities\Game.cs" />
     <Compile Include="Entities\GameResponse.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="Entities\PlayerCountResponse.cs" />
     <Compile Include="Entities\PlayerRankResponse.cs" />
     <Compile Include="Entities\PlayerResponse.cs" />
     <Compile Include="Entities\Score.cs" />

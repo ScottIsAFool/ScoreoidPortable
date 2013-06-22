@@ -13,12 +13,14 @@ namespace ScoreoidPortable
     {
         private const string ScoreoidEndpoint = "https://www.scoreoid.com/api/";
 
+        #region Public properties
         public HttpClient HttpClient { get; private set; }
 
         public string ApiKey { get; set; }
 
         public string GameId { get; set; }
-        
+        #endregion
+
         #region Constructors
         public ScoreoidClient(string apiKey, string gameId, HttpMessageHandler handler)
         {
@@ -66,7 +68,55 @@ namespace ScoreoidPortable
 
         #region Player methods
 
+        public async Task<int> GetPlayerCountAsync(DateTime? startDate = null, DateTime? endDate = null, string platform = null, int difficulty = 0)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
 
+            var postData = CreatePostData();
+            if (startDate.HasValue)
+            {
+                postData["start_date"] = startDate.Value.ToString("YYY-MM-DD");
+            }
+
+            if (endDate.HasValue)
+            {
+                postData["end_date"] = endDate.Value.ToString("YYY-MM-DD");
+            }
+
+            if (!string.IsNullOrEmpty(platform))
+            {
+                postData["platform"] = platform;
+            }
+
+            if (difficulty > 0)
+            {
+                postData["difficulty"] = difficulty.ToString();
+            }
+
+            var response = await PostData<PlayerCountResponse>(postData, "countPlayers");
+
+            return response.PlayerCount;
+        }
+
+        public async Task<Player> GetPlayerAsync(string username)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException("username", "Username cannot be null or empty");
+            }
+
+            var users = await GetPlayerFromQueryAsync(username, null, null);
+
+            return users != null && users.Any() ? users[0].Player : null;
+        }
 
         public async Task<bool> DeletePlayerAsync(string username)
         {
