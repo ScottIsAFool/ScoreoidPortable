@@ -114,12 +114,12 @@ namespace ScoreoidPortable
             var postData = CreatePostData();
             if (startDate.HasValue)
             {
-                postData["start_date"] = startDate.Value.ToString("YYY-MM-DD");
+                postData["start_date"] = startDate.Value.ToString("YYYY-MM-DD");
             }
 
             if (endDate.HasValue)
             {
-                postData["end_date"] = endDate.Value.ToString("YYY-MM-DD");
+                postData["end_date"] = endDate.Value.ToString("YYYY-MM-DD");
             }
 
             if (!string.IsNullOrEmpty(platform))
@@ -290,12 +290,12 @@ namespace ScoreoidPortable
 
             if (startDate.HasValue)
             {
-                postData["start_date"] = startDate.Value.ToString("YYY-MM-DD");
+                postData["start_date"] = startDate.Value.ToString("YYYY-MM-DD");
             }
 
             if (endDate.HasValue)
             {
-                postData["end_date"] = endDate.Value.ToString("YYY-MM-DD");
+                postData["end_date"] = endDate.Value.ToString("YYYY-MM-DD");
             }
 
             if (!string.IsNullOrEmpty(platform))
@@ -352,40 +352,68 @@ namespace ScoreoidPortable
                 throw new ArgumentNullException("username", "Username cannot be null or empty");
             }
 
+            var response = await GetScoresFromQueryAsync("username", "getPlayerScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, username);
+
+            return response.ToList().Select(x => x.Scores).ToList();
+        }
+
+        #endregion
+
+        #region Score methods
+
+        /// <summary>
+        /// Creates the score async.
+        /// </summary>
+        /// <param name="score">The score.</param>
+        /// <returns>True if the score published ok</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">score;Score cannot be null</exception>
+        public async Task<bool> CreateScoreAsync(Score score)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            if (score == null)
+            {
+                throw new ArgumentNullException("score", "Score cannot be null");
+            }
+
             var postData = CreatePostData();
-            postData["username"] = username;
+            postData.InsertItemToDictionary(score);
 
-            if (sortBy.HasValue)
+            var response = await PostData<SuccessResponse>(postData, "createScore");
+
+            return response != null;
+        }
+
+        /// <summary>
+        /// Counts the scores 
+        /// </summary>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <param name="difficulty">The difficulty. [Optional]</param>
+        /// <returns>The count of scores for your game</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        public async Task<double> CountScoresAsync(DateTime? startDate = null, DateTime? endDate = null, string platform = null, int difficulty = 0)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
             {
-                postData["order_by"] = sortBy.Value.GetDescription();
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
             }
 
-            if (orderBy.HasValue)
-            {
-                postData["order"] = orderBy.Value.GetDescription();
-            }
-
-            if (startingAt.HasValue && numberToRetrieve.HasValue)
-            {
-                var limit = string.Format("{0},{1}", startingAt, numberToRetrieve);
-                postData["limit"] = limit;
-            }
-            else
-            {
-                if (numberToRetrieve.HasValue)
-                {
-                    postData["limit"] = numberToRetrieve.Value.ToString();
-                }
-            }
+            var postData = CreatePostData();
 
             if (startDate.HasValue)
             {
-                postData["start_date"] = startDate.Value.ToString("YYY-MM-DD");
+                postData["start_date"] = startDate.Value.ToString("YYYY-MM-DD");
             }
 
             if (endDate.HasValue)
             {
-                postData["end_date"] = endDate.Value.ToString("YYY-MM-DD");
+                postData["end_date"] = endDate.Value.ToString("YYYY-MM-DD");
             }
 
             if (!string.IsNullOrEmpty(platform))
@@ -398,13 +426,134 @@ namespace ScoreoidPortable
                 postData["difficulty"] = difficulty.ToString();
             }
 
-            var response = await PostData<ScoreArray[]>(postData, "getPlayerScores");
+            var response = await PostData<ScoreCountResponse>(postData, "countScores");
+
+            return response.ScoreCount;
+        }
+
+        /// <summary>
+        /// Counts the best scores 
+        /// </summary>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <param name="difficulty">The difficulty. [Optional]</param>
+        /// <returns>The count of best scores for your game</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        public async Task<double> CountBestScoresAsync(DateTime? startDate = null, DateTime? endDate = null, string platform = null, int difficulty = 0)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+
+            if (startDate.HasValue)
+            {
+                postData["start_date"] = startDate.Value.ToString("YYYY-MM-DD");
+            }
+
+            if (endDate.HasValue)
+            {
+                postData["end_date"] = endDate.Value.ToString("YYYY-MM-DD");
+            }
+
+            if (!string.IsNullOrEmpty(platform))
+            {
+                postData["platform"] = platform;
+            }
+
+            if (difficulty > 0)
+            {
+                postData["difficulty"] = difficulty.ToString();
+            }
+
+            var response = await PostData<ScoreCountResponse>(postData, "countBestScores");
+
+            return response.ScoreCount;
+        }
+
+        /// <summary>
+        /// Gets the scores.
+        /// </summary>
+        /// <param name="usernames">The username.</param>
+        /// <param name="sortBy">The criteria on which to sort by. [Optional]</param>
+        /// <param name="orderBy">The criteria on which to order by (based on the sortBy property). [Optional]</param>
+        /// <param name="startingAt">The number at which items will start at. This value is ignored if numberToRetrieve is not also set [Optional]</param>
+        /// <param name="numberToRetrieve">The number to retrieve. [Optional]</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <param name="difficulty">The difficulty. [Optional]</param>
+        /// <returns>
+        /// A list of scores for the given player and criteria
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">API Key cannot be null or empty
+        /// or
+        /// Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
+        public async Task<List<Score>> GetScoresAsync(SortBy? sortBy = null,
+                                                    OrderBy? orderBy = null,
+                                                    int? startingAt = null,
+                                                    int? numberToRetrieve = null,
+                                                    DateTime? startDate = null,
+                                                    DateTime? endDate = null,
+                                                    string platform = null,
+                                                    int difficulty = 0,
+                                                    string usernames = null)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            var response = await GetScoresFromQueryAsync("usernames", "getScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
 
             return response.ToList().Select(x => x.Scores).ToList();
         }
 
-        #endregion
+        /// <summary>
+        /// Gets the best player scores.
+        /// </summary>
+        /// <param name="usernames">The username.</param>
+        /// <param name="sortBy">The criteria on which to sort by. [Optional]</param>
+        /// <param name="orderBy">The criteria on which to order by (based on the sortBy property). [Optional]</param>
+        /// <param name="startingAt">The number at which items will start at. This value is ignored if numberToRetrieve is not also set [Optional]</param>
+        /// <param name="numberToRetrieve">The number to retrieve. [Optional]</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <param name="difficulty">The difficulty. [Optional]</param>
+        /// <returns>
+        /// A list of scores for the given player and criteria
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">API Key cannot be null or empty
+        /// or
+        /// Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
+        public async Task<List<Score>> GetBestScoresAsync(SortBy? sortBy = null,
+            OrderBy? orderBy = null,
+            int? startingAt = null,
+            int? numberToRetrieve = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            string platform = null,
+            int difficulty = 0,
+            string usernames = null)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
 
+            var response = await GetScoresFromQueryAsync("usernames", "getBestScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
+
+            return response.ToList().Select(x => x.Scores).ToList();
+        }
+
+
+        #endregion
         #endregion
 
         #region Private methods
@@ -436,6 +585,73 @@ namespace ScoreoidPortable
             }
 
             return await PostData<PlayerResponse[]>(postData, "getPlayer", isLogin);
+        }
+
+        private async Task<ScoreResponse[]> GetScoresFromQueryAsync(string usernameParameter, 
+            string methodName, 
+            SortBy? sortBy = null,
+            OrderBy? orderBy = null,
+            int? startingAt = null,
+            int? numberToRetrieve = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            string platform = null,
+            int difficulty = 0,
+            string usernames = null)
+        {
+            var postData = CreatePostData();
+
+            if (sortBy.HasValue)
+            {
+                postData["order_by"] = sortBy.Value.GetDescription();
+            }
+
+            if (orderBy.HasValue)
+            {
+                postData["order"] = orderBy.Value.GetDescription();
+            }
+
+            if (startingAt.HasValue && numberToRetrieve.HasValue)
+            {
+                var limit = string.Format("{0},{1}", startingAt, numberToRetrieve);
+                postData["limit"] = limit;
+            }
+            else
+            {
+                if (numberToRetrieve.HasValue)
+                {
+                    postData["limit"] = numberToRetrieve.Value.ToString();
+                }
+            }
+
+            if (startDate.HasValue)
+            {
+                postData["start_date"] = startDate.Value.ToString("YYYY-MM-DD");
+            }
+
+            if (endDate.HasValue)
+            {
+                postData["end_date"] = endDate.Value.ToString("YYYY-MM-DD");
+            }
+
+            if (!string.IsNullOrEmpty(platform))
+            {
+                postData["platform"] = platform;
+            }
+
+            if (difficulty > 0)
+            {
+                postData["difficulty"] = difficulty.ToString();
+            }
+
+            if (!string.IsNullOrEmpty(usernames))
+            {
+                postData[usernameParameter] = usernames;
+            }
+
+            var response = await PostData<ScoreResponse[]>(postData, methodName);
+
+            return response;
         }
 
         /// <summary>

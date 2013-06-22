@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Serialization;
+using ScoreoidPortable.Attributes;
 
 namespace ScoreoidPortable
 {

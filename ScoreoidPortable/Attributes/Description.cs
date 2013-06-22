@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ScoreoidPortable
+namespace ScoreoidPortable.Attributes
 {
     internal class Description : Attribute
     {

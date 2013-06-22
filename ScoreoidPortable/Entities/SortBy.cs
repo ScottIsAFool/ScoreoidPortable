@@ -1,4 +1,6 @@
-﻿namespace ScoreoidPortable.Entities
+﻿using ScoreoidPortable.Attributes;
+
+namespace ScoreoidPortable.Entities
 {
     public enum SortBy
     {

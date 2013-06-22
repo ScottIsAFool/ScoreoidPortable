@@ -3,6 +3,7 @@
 
 using System;
 using Newtonsoft.Json;
+using ScoreoidPortable.Attributes;
 
 namespace ScoreoidPortable.Entities
 {

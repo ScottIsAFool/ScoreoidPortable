@@ -3,6 +3,7 @@
 
 using System;
 using Newtonsoft.Json;
+using ScoreoidPortable.Attributes;
 
 namespace ScoreoidPortable.Entities
 {
@@ -24,7 +25,7 @@ namespace ScoreoidPortable.Entities
         public object Leaderboard { get; set; }
 
         [JsonProperty("data"), Description("data")]
-        public object Data { get; set; }
+        public string Data { get; set; }
 
         [JsonProperty("score"), Description("score")]
         public string TheScore { get; set; }
@@ -36,7 +37,7 @@ namespace ScoreoidPortable.Entities
         public DateTime CreatedDate { get; set; }
     }
 
-    public class ScoreArray
+    public class ScoreResponse
     {
         [JsonProperty("Score")]
         public Score Scores { get; set; }

@@ -1,10 +1,11 @@
 ﻿using System;
+using ScoreoidPortable.Attributes;
 
 namespace ScoreoidPortable
 {
-    public static class Utils
+    internal static class Utils
     {
-        public static string GetDescriptionFromName(string name, Type type)
+        internal static string GetDescriptionFromName(string name, Type type)
         {
             var property = type.GetProperty(name);
 
