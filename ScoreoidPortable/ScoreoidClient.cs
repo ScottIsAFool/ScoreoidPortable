@@ -552,7 +552,48 @@ namespace ScoreoidPortable
             return response.ToList().Select(x => x.Scores).ToList();
         }
 
+        /// <summary>
+        /// Gets the average score.
+        /// </summary>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="difficulty">The difficulty.</param>
+        /// <returns>Returns the average score based on the given criteria</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        public async Task<double> GetAverageScoreAsync(DateTime? startDate = null, DateTime? endDate = null, string platform = null, int difficulty = 0)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
 
+            var postData = CreatePostData();
+
+            if (startDate.HasValue)
+            {
+                postData["start_date"] = startDate.Value.ToString("YYYY-MM-DD");
+            }
+
+            if (endDate.HasValue)
+            {
+                postData["end_date"] = endDate.Value.ToString("YYYY-MM-DD");
+            }
+
+            if (!string.IsNullOrEmpty(platform))
+            {
+                postData["platform"] = platform;
+            }
+
+            if (difficulty > 0)
+            {
+                postData["difficulty"] = difficulty.ToString();
+            }
+
+            var response = await PostData<AverageScoreResponse>(postData, "getAverageScore");
+
+            return response.AverageScore;
+        }
         #endregion
         #endregion
 
