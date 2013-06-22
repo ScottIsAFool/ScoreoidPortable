@@ -14,14 +14,29 @@ namespace ScoreoidPortable
         private const string ScoreoidEndpoint = "https://www.scoreoid.com/api/";
 
         #region Public properties
-        public HttpClient HttpClient { get; private set; }
 
-        public string ApiKey { get; set; }
+        public HttpClient HttpClient
+        {
+            get;
+            private set;
+        }
 
-        public string GameId { get; set; }
+        public string ApiKey
+        {
+            get;
+            set;
+        }
+
+        public string GameId
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Constructors
+
         public ScoreoidClient(string apiKey, string gameId, HttpMessageHandler handler)
         {
             HttpClient = new HttpClient(handler);
@@ -39,15 +54,18 @@ namespace ScoreoidPortable
             GameId = gameId;
         }
 
-        public ScoreoidClient() 
+        public ScoreoidClient()
             : this(string.Empty, string.Empty)
         {
 
         }
+
         #endregion
 
         #region Public methods
+
         #region Other methods
+
         /// <summary>
         /// Signs the in async.
         /// </summary>
@@ -72,6 +90,7 @@ namespace ScoreoidPortable
 
             return users != null && users.Any();
         }
+
         #endregion
 
         #region Player methods
@@ -298,14 +317,30 @@ namespace ScoreoidPortable
         /// Gets the player scores async.
         /// </summary>
         /// <param name="username">The username.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NullReferenceException">
-        /// API Key cannot be null or empty
+        /// <param name="sortBy">The criteria on which to sort by. [Optional]</param>
+        /// <param name="orderBy">The criteria on which to order by (based on the sortBy property). [Optional]</param>
+        /// <param name="startingAt">The number at which items will start at. This value is ignored if numberToRetrieve is not also set [Optional]</param>
+        /// <param name="numberToRetrieve">The number to retrieve. [Optional]</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <param name="difficulty">The difficulty. [Optional]</param>
+        /// <returns>
+        /// A list of scores for the given player and criteria
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">API Key cannot be null or empty
         /// or
-        /// Game ID cannot be null or empty
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">username;Username cannot be null or empty</exception>
-        public async Task<List<Score>> GetPlayerScoresAsync(string username)
+        /// Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
+        public async Task<List<Score>> GetPlayerScoresAsync(string username,
+                                                            SortBy? sortBy = null,
+                                                            OrderBy? orderBy = null,
+                                                            int? startingAt = null,
+                                                            int? numberToRetrieve = null,
+                                                            DateTime? startDate = null,
+                                                            DateTime? endDate = null,
+                                                            string platform = null,
+                                                            int difficulty = 0)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
             {
@@ -320,11 +355,56 @@ namespace ScoreoidPortable
             var postData = CreatePostData();
             postData["username"] = username;
 
+            if (sortBy.HasValue)
+            {
+                postData["order_by"] = sortBy.Value.GetDescription();
+            }
+
+            if (orderBy.HasValue)
+            {
+                postData["order"] = orderBy.Value.GetDescription();
+            }
+
+            if (startingAt.HasValue && numberToRetrieve.HasValue)
+            {
+                var limit = string.Format("{0},{1}", startingAt, numberToRetrieve);
+                postData["limit"] = limit;
+            }
+            else
+            {
+                if (numberToRetrieve.HasValue)
+                {
+                    postData["limit"] = numberToRetrieve.Value.ToString();
+                }
+            }
+
+            if (startDate.HasValue)
+            {
+                postData["start_date"] = startDate.Value.ToString("YYY-MM-DD");
+            }
+
+            if (endDate.HasValue)
+            {
+                postData["end_date"] = endDate.Value.ToString("YYY-MM-DD");
+            }
+
+            if (!string.IsNullOrEmpty(platform))
+            {
+                postData["platform"] = platform;
+            }
+
+            if (difficulty > 0)
+            {
+                postData["difficulty"] = difficulty.ToString();
+            }
+
             var response = await PostData<ScoreArray[]>(postData, "getPlayerScores");
 
             return response.ToList().Select(x => x.Scores).ToList();
         }
+
         #endregion
+
         #endregion
 
         #region Private methods
@@ -413,6 +493,45 @@ namespace ScoreoidPortable
             postData["response"] = "JSON";
             return postData;
         }
+
         #endregion
+    }
+
+    public enum SortBy
+    {
+        [Description("date")]
+        Date,
+        [Description("score")]
+        Score,
+        [Description("date,score")]
+        DateThenScore,
+        [Description("score,date")]
+        ScoreThenDate
+    }
+
+    public enum OrderBy
+    {
+        [Description("asc")]
+        Ascending,
+        [Description("desc")]
+        Descending,
+        [Description("asc,asc")]
+        AscendingAscending,
+        [Description("asc,desc")]
+        AscendingDescending,
+        [Description("desc,desc")]
+        DescendingDescending,
+        [Description("desc,asc")]
+        DescendingAscending
+    }
+
+    internal class Description : Attribute
+    {
+        public string Text;
+
+        public Description(string text)
+        {
+            Text = text;
+        }
     }
 }

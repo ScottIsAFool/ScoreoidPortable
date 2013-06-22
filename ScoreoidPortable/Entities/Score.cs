@@ -8,32 +8,32 @@ namespace ScoreoidPortable.Entities
 {
     public class Score
     {
-        [JsonProperty("id")]
+        [JsonProperty("id"), Description("id")]
         public string Id { get; set; }
 
-        [JsonProperty("player_id")]
+        [JsonProperty("player_id"), Description("player_id")]
         public string PlayerId { get; set; }
 
-        [JsonProperty("difficulty")]
+        [JsonProperty("difficulty"), Description("difficulty")]
         public int Difficulty { get; set; }
 
-        [JsonProperty("platform")]
+        [JsonProperty("platform"), Description("platform")]
         public string Platform { get; set; }
 
-        [JsonProperty("leaderboard")]
+        [JsonProperty("leaderboard"), Description("leaderboard")]
         public object Leaderboard { get; set; }
 
-        [JsonProperty("data")]
+        [JsonProperty("data"), Description("data")]
         public object Data { get; set; }
 
-        [JsonProperty("score")]
+        [JsonProperty("score"), Description("score")]
         public string TheScore { get; set; }
 
-        [JsonProperty("game_id")]
+        [JsonProperty("game_id"), Description("game_id")]
         public string GameId { get; set; }
 
-        [JsonProperty("created")]
-        public DateTime Created { get; set; }
+        [JsonProperty("created"), Description("created")]
+        public DateTime CreatedDate { get; set; }
     }
 
     public class ScoreArray

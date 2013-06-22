@@ -10,7 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{845C21
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreoidTest", "ScoreoidTest\ScoreoidTest.csproj", "{57D9A581-B315-48AB-B10C-B92A69A23AF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreoidTestApp", "ScoreoidTest\ScoreoidTestApp.csproj", "{57D9A581-B315-48AB-B10C-B92A69A23AF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreoidTests", "ScoreoidTests\ScoreoidTests.csproj", "{60C70662-0690-4A36-BD0E-AAF7B4176D34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,14 @@ Global
 		{57D9A581-B315-48AB-B10C-B92A69A23AF5}.Release|x86.ActiveCfg = Release|x86
 		{57D9A581-B315-48AB-B10C-B92A69A23AF5}.Release|x86.Build.0 = Release|x86
 		{57D9A581-B315-48AB-B10C-B92A69A23AF5}.Release|x86.Deploy.0 = Release|x86
+		{60C70662-0690-4A36-BD0E-AAF7B4176D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C70662-0690-4A36-BD0E-AAF7B4176D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60C70662-0690-4A36-BD0E-AAF7B4176D34}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{60C70662-0690-4A36-BD0E-AAF7B4176D34}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{60C70662-0690-4A36-BD0E-AAF7B4176D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60C70662-0690-4A36-BD0E-AAF7B4176D34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60C70662-0690-4A36-BD0E-AAF7B4176D34}.Release|ARM.ActiveCfg = Release|Any CPU
+		{60C70662-0690-4A36-BD0E-AAF7B4176D34}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
