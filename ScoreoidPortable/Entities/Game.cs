@@ -1,53 +1,54 @@
 ﻿using System;
 using Newtonsoft.Json;
+using ScoreoidPortable.Attributes;
 
 namespace ScoreoidPortable.Entities
 {
     public class Game
     {
-        [JsonProperty("user_id")]
+        [JsonProperty("user_id"), Description("user_id")]
         public string UserId { get; set; }
 
-        [JsonProperty("name")]
+        [JsonProperty("name"), Description("name")]
         public string Name { get; set; }
 
-        [JsonProperty("short_description")]
+        [JsonProperty("short_description"), Description("short_description")]
         public string ShortDescription { get; set; }
 
-        [JsonProperty("description")]
+        [JsonProperty("description"), Description("description")]
         public string Description { get; set; }
 
-        [JsonProperty("game_type")]
+        [JsonProperty("game_type"), Description("game_type")]
         public string GameType { get; set; }
 
-        [JsonProperty("version")]
+        [JsonProperty("version"), Description("version")]
         public string Version { get; set; }
 
-        [JsonProperty("levels")]
+        [JsonProperty("levels"), Description("levels")]
         public int Levels { get; set; }
 
-        [JsonProperty("platform")]
+        [JsonProperty("platform"), Description("platform")]
         public string Platform { get; set; }
 
-        [JsonProperty("play_url")]
+        [JsonProperty("play_url"), Description("play_url")]
         public string PlayUrl { get; set; }
 
-        [JsonProperty("website_url")]
+        [JsonProperty("website_url"), Description("website_url")]
         public string WebsiteUrl { get; set; }
 
-        [JsonProperty("players_count")]
+        [JsonProperty("players_count"), Description("players_count")]
         public int PlayersCount { get; set; }
 
-        [JsonProperty("scores_count")]
+        [JsonProperty("scores_count"), Description("scores_count")]
         public int ScoresCount { get; set; }
 
-        [JsonProperty("status")]
+        [JsonProperty("status"), Description("status")]
         public int Status { get; set; }
 
-        [JsonProperty("created")]
+        [JsonProperty("created"), Description("created")]
         public DateTime CreatedDate { get; set; }
 
-        [JsonProperty("updated")]
+        [JsonProperty("updated"), Description("updated")]
         public DateTime UpdatedDate { get; set; }
     }
 }

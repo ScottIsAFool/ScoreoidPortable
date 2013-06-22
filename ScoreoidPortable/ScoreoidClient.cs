@@ -352,7 +352,7 @@ namespace ScoreoidPortable
                 throw new ArgumentNullException("username", "Username cannot be null or empty");
             }
 
-            var response = await GetScoresFromQueryAsync("username", "getPlayerScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, username);
+            var response = await GetItemsFromQueryAsync<ScoreResponse[]>("username", "getPlayerScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, username);
 
             return response.ToList().Select(x => x.Scores).ToList();
         }
@@ -508,7 +508,7 @@ namespace ScoreoidPortable
                 throw new NullReferenceException("API Key or Game ID cannot be null or empty");
             }
 
-            var response = await GetScoresFromQueryAsync("usernames", "getScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
+            var response = await GetItemsFromQueryAsync<ScoreResponse[]>("usernames", "getScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
 
             return response.ToList().Select(x => x.Scores).ToList();
         }
@@ -547,7 +547,7 @@ namespace ScoreoidPortable
                 throw new NullReferenceException("API Key or Game ID cannot be null or empty");
             }
 
-            var response = await GetScoresFromQueryAsync("usernames", "getBestScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
+            var response = await GetItemsFromQueryAsync<ScoreResponse[]>("usernames", "getBestScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
 
             return response.ToList().Select(x => x.Scores).ToList();
         }
@@ -595,6 +595,59 @@ namespace ScoreoidPortable
             return response.AverageScore;
         }
         #endregion
+
+        #region Game methods
+
+        /// <summary>
+        /// Gets the game details.
+        /// </summary>
+        /// <returns>The game details for the game id being used.</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        public async Task<Game> GetGameAsync()
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+
+            var response = await PostData<GameResponse>(postData, "getGame");
+
+            return response.Game;
+        }
+
+        /// <summary>
+        /// Gets the game players.
+        /// </summary>
+        /// <param name="sortBy">The sort by.</param>
+        /// <param name="orderBy">The order by.</param>
+        /// <param name="startingAt">The starting at.</param>
+        /// <param name="numberToRetrieve">The number to retrieve.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <returns>The list of players for this game</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        public async Task<List<Player>> GetGamePlayersAsync(SortBy? sortBy = null,
+            OrderBy? orderBy = null,
+            int? startingAt = null,
+            int? numberToRetrieve = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            string platform = null)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            var response = await GetItemsFromQueryAsync<PlayerResponse[]>("", "getPlayers", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform);
+
+            return response.ToList().Select(x => x.Player).ToList();
+        } 
+        
+        #endregion
         #endregion
 
         #region Private methods
@@ -628,7 +681,7 @@ namespace ScoreoidPortable
             return await PostData<PlayerResponse[]>(postData, "getPlayer", isLogin);
         }
 
-        private async Task<ScoreResponse[]> GetScoresFromQueryAsync(string usernameParameter, 
+        private async Task<T> GetItemsFromQueryAsync<T>(string usernameParameter, 
             string methodName, 
             SortBy? sortBy = null,
             OrderBy? orderBy = null,
@@ -690,7 +743,7 @@ namespace ScoreoidPortable
                 postData[usernameParameter] = usernames;
             }
 
-            var response = await PostData<ScoreResponse[]>(postData, methodName);
+            var response = await PostData<T>(postData, methodName);
 
             return response;
         }
