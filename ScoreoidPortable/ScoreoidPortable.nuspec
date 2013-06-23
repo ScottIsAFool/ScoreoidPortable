@@ -19,6 +19,7 @@ using this tokenized nuspec file.
     <owners />
     <id>ScoreoidPortable</id>
     <title />
+    <projectUrl>https://github.com/ScottIsAFool/ScoreoidPortable</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A PCL package for Scoreoid, runs on Silverlight, desktop, Windows 8, Windows Phone 7 and Windows Phone 8</description>
   </metadata>
