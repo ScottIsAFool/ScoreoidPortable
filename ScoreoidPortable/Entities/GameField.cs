@@ -1,6 +1,6 @@
 ﻿using ScoreoidPortable.Attributes;
 
-namespace ScoreoidPortable
+namespace ScoreoidPortable.Entities
 {
     public enum GameField
     {

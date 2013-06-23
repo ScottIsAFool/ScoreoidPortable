@@ -3,10 +3,12 @@
 
 using System;
 using Newtonsoft.Json;
+using PropertyChanged;
 using ScoreoidPortable.Attributes;
 
 namespace ScoreoidPortable.Entities
 {
+    [ImplementPropertyChanged]
     public class Player
     {
         [JsonProperty("username"), Description("username")]

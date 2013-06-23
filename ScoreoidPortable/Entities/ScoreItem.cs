@@ -2,9 +2,11 @@
 // http://www.xamasoft.com/json-class-generator
 
 using Newtonsoft.Json;
+using PropertyChanged;
 
 namespace ScoreoidPortable.Entities
 {
+    [ImplementPropertyChanged]
     public class ScoreItem
     {
         [JsonProperty("Player")]

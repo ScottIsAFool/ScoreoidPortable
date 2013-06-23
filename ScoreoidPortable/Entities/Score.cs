@@ -3,10 +3,12 @@
 
 using System;
 using Newtonsoft.Json;
+using PropertyChanged;
 using ScoreoidPortable.Attributes;
 
 namespace ScoreoidPortable.Entities
 {
+    [ImplementPropertyChanged]
     public class Score
     {
         [JsonProperty("id"), Description("id")]
@@ -35,12 +37,6 @@ namespace ScoreoidPortable.Entities
 
         [JsonProperty("created"), Description("created")]
         public DateTime CreatedDate { get; set; }
-    }
-
-    public class ScoreResponse
-    {
-        [JsonProperty("Score")]
-        public Score Scores { get; set; }
     }
 }
 

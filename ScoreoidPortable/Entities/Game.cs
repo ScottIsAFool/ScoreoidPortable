@@ -1,9 +1,11 @@
 ﻿using System;
 using Newtonsoft.Json;
+using PropertyChanged;
 using ScoreoidPortable.Attributes;
 
 namespace ScoreoidPortable.Entities
 {
+    [ImplementPropertyChanged]
     public class Game
     {
         [JsonProperty("user_id"), Description("user_id")]
