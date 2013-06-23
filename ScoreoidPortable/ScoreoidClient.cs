@@ -334,8 +334,8 @@ namespace ScoreoidPortable
         /// Game ID cannot be null or empty</exception>
         /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
         public async Task<List<Score>> GetPlayerScoresAsync(string username,
-                                                            SortBy? sortBy = null,
-                                                            OrderBy? orderBy = null,
+                                                            SortBy? sortBy = SortBy.Score,
+                                                            OrderBy? orderBy = OrderBy.Ascending,
                                                             int? startingAt = null,
                                                             int? numberToRetrieve = null,
                                                             DateTime? startDate = null,
@@ -506,8 +506,8 @@ namespace ScoreoidPortable
         /// or
         /// Game ID cannot be null or empty</exception>
         /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
-        public async Task<List<ScoreItem>> GetScoresAsync(SortBy? sortBy = null,
-                                                    OrderBy? orderBy = null,
+        public async Task<List<ScoreItem>> GetScoresAsync(SortBy? sortBy = SortBy.Score,
+                                                            OrderBy? orderBy = OrderBy.Ascending,
                                                     int? startingAt = null,
                                                     int? numberToRetrieve = null,
                                                     DateTime? startDate = null,
@@ -545,8 +545,8 @@ namespace ScoreoidPortable
         /// or
         /// Game ID cannot be null or empty</exception>
         /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
-        public async Task<List<ScoreItem>> GetBestScoresAsync(SortBy? sortBy = null,
-            OrderBy? orderBy = null,
+        public async Task<List<ScoreItem>> GetBestScoresAsync(SortBy? sortBy = SortBy.Score,
+                                                            OrderBy? orderBy = OrderBy.Ascending,
             int? startingAt = null,
             int? numberToRetrieve = null,
             DateTime? startDate = null,
@@ -642,8 +642,8 @@ namespace ScoreoidPortable
         /// <param name="platform">The platform. [Optional]</param>
         /// <returns>The list of players for this game</returns>
         /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
-        public async Task<List<Player>> GetGamePlayersAsync(SortBy? sortBy = null,
-            OrderBy? orderBy = null,
+        public async Task<List<Player>> GetGamePlayersAsync(SortBy? sortBy = SortBy.Score,
+                                                            OrderBy? orderBy = OrderBy.Ascending,
             int? startingAt = null,
             int? numberToRetrieve = null,
             DateTime? startDate = null,
