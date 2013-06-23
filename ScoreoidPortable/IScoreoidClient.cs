@@ -126,11 +126,16 @@ namespace ScoreoidPortable
         /// <summary>
         /// Creates the score async.
         /// </summary>
+        /// <param name="username">The username.</param>
         /// <param name="score">The score.</param>
-        /// <returns>True if the score published ok</returns>
+        /// <returns>True if the score published successfully</returns>
         /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
-        /// <exception cref="System.ArgumentNullException">score;Score cannot be null</exception>
-        Task<bool> CreateScoreAsync(Score score);
+        /// <exception cref="System.ArgumentNullException">
+        /// Score cannot be null
+        /// or
+        /// Username cannot be null or empty
+        /// </exception>
+        Task<bool> CreateScoreAsync(string username, Score score);
 
         /// <summary>
         /// Counts the scores 
@@ -173,7 +178,7 @@ namespace ScoreoidPortable
         /// or
         /// Game ID cannot be null or empty</exception>
         /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
-        Task<List<Score>> GetScoresAsync(SortBy? sortBy = null,
+        Task<List<ScoreItem>> GetScoresAsync(SortBy? sortBy = null,
             OrderBy? orderBy = null,
             int? startingAt = null,
             int? numberToRetrieve = null,
@@ -202,7 +207,7 @@ namespace ScoreoidPortable
         /// or
         /// Game ID cannot be null or empty</exception>
         /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
-        Task<List<Score>> GetBestScoresAsync(SortBy? sortBy = null,
+        Task<List<ScoreItem>> GetBestScoresAsync(SortBy? sortBy = null,
             OrderBy? orderBy = null,
             int? startingAt = null,
             int? numberToRetrieve = null,

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using PropertyChanged;
 using ScoreoidPortable.Entities;
 using System.Linq;
 
@@ -361,14 +362,20 @@ namespace ScoreoidPortable
 
         #region Score methods
 
+
         /// <summary>
         /// Creates the score async.
         /// </summary>
+        /// <param name="username">The username.</param>
         /// <param name="score">The score.</param>
-        /// <returns>True if the score published ok</returns>
+        /// <returns>True if the score published successfully</returns>
         /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
-        /// <exception cref="System.ArgumentNullException">score;Score cannot be null</exception>
-        public async Task<bool> CreateScoreAsync(Score score)
+        /// <exception cref="System.ArgumentNullException">
+        /// Score cannot be null
+        /// or
+        /// Username cannot be null or empty
+        /// </exception>
+        public async Task<bool> CreateScoreAsync(string username, Score score)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
             {
@@ -380,7 +387,13 @@ namespace ScoreoidPortable
                 throw new ArgumentNullException("score", "Score cannot be null");
             }
 
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException("username", "Username cannot be null or empty");
+            }
+
             var postData = CreatePostData();
+            postData["username"] = username;
             postData.InsertItemToDictionary(score);
 
             var response = await PostData<SuccessResponse>(postData, "createScore");
@@ -493,7 +506,7 @@ namespace ScoreoidPortable
         /// or
         /// Game ID cannot be null or empty</exception>
         /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
-        public async Task<List<Score>> GetScoresAsync(SortBy? sortBy = null,
+        public async Task<List<ScoreItem>> GetScoresAsync(SortBy? sortBy = null,
                                                     OrderBy? orderBy = null,
                                                     int? startingAt = null,
                                                     int? numberToRetrieve = null,
@@ -508,9 +521,9 @@ namespace ScoreoidPortable
                 throw new NullReferenceException("API Key or Game ID cannot be null or empty");
             }
 
-            var response = await GetItemsFromQueryAsync<ScoreResponse[]>("usernames", "getScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
+            var response = await GetItemsFromQueryAsync<ScoreItem[]>("usernames", "getScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
 
-            return response.ToList().Select(x => x.Scores).ToList();
+            return response.ToList();
         }
 
         /// <summary>
@@ -532,7 +545,7 @@ namespace ScoreoidPortable
         /// or
         /// Game ID cannot be null or empty</exception>
         /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
-        public async Task<List<Score>> GetBestScoresAsync(SortBy? sortBy = null,
+        public async Task<List<ScoreItem>> GetBestScoresAsync(SortBy? sortBy = null,
             OrderBy? orderBy = null,
             int? startingAt = null,
             int? numberToRetrieve = null,
@@ -547,9 +560,9 @@ namespace ScoreoidPortable
                 throw new NullReferenceException("API Key or Game ID cannot be null or empty");
             }
 
-            var response = await GetItemsFromQueryAsync<ScoreResponse[]>("usernames", "getBestScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
+            var response = await GetItemsFromQueryAsync<ScoreItem[]>("usernames", "getBestScores", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, usernames);
 
-            return response.ToList().Select(x => x.Scores).ToList();
+            return response.ToList();
         }
 
         /// <summary>
