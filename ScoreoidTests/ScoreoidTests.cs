@@ -16,5 +16,18 @@ namespace ScoreoidTests
 
             Assert.AreEqual("unique_id", name);
         }
+
+        [TestMethod]
+        // ReSharper disable once InconsistentNaming
+        public void Test_Get_Number_From_Json()
+        {
+            var json = "{\"bonus\":0.3}";
+
+            var client = new ScoreoidClient();
+
+            var value = client.GetNumberFromJson(json);
+
+            Assert.AreEqual(0.3, value);
+        }
     }
 }

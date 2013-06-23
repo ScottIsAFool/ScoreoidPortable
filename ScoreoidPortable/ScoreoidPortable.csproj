@@ -55,6 +55,7 @@
     <Compile Include="Entities\SuccessResponse.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Entities\OrderBy.cs" />
+    <Compile Include="GameField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScoreoidClient.cs" />
     <Compile Include="Entities\SortBy.cs" />

@@ -555,10 +555,10 @@ namespace ScoreoidPortable
         /// <summary>
         /// Gets the average score.
         /// </summary>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <param name="platform">The platform.</param>
-        /// <param name="difficulty">The difficulty.</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <param name="difficulty">The difficulty. [Optional]</param>
         /// <returns>Returns the average score based on the given criteria</returns>
         /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
         public async Task<double> GetAverageScoreAsync(DateTime? startDate = null, DateTime? endDate = null, string platform = null, int difficulty = 0)
@@ -620,13 +620,13 @@ namespace ScoreoidPortable
         /// <summary>
         /// Gets the game players.
         /// </summary>
-        /// <param name="sortBy">The sort by.</param>
-        /// <param name="orderBy">The order by.</param>
-        /// <param name="startingAt">The starting at.</param>
-        /// <param name="numberToRetrieve">The number to retrieve.</param>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
-        /// <param name="platform">The platform.</param>
+        /// <param name="sortBy">The criteria on which to sort by. [Optional]</param>
+        /// <param name="orderBy">The criteria on which to order by (based on the sortBy property). [Optional]</param>
+        /// <param name="startingAt">The number at which items will start at. This value is ignored if numberToRetrieve is not also set [Optional]</param>
+        /// <param name="numberToRetrieve">The number to retrieve. [Optional]</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
         /// <returns>The list of players for this game</returns>
         /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
         public async Task<List<Player>> GetGamePlayersAsync(SortBy? sortBy = null,
@@ -645,15 +645,146 @@ namespace ScoreoidPortable
             var response = await GetItemsFromQueryAsync<PlayerResponse[]>("", "getPlayers", sortBy, orderBy, startingAt, numberToRetrieve, startDate, endDate, platform);
 
             return response.ToList().Select(x => x.Player).ToList();
-        } 
-        
-        #endregion
-        #endregion
-
-        #region Private methods
+        }
 
         /// <summary>
-        /// Gets the player from query async.
+        /// Gets the game average.
+        /// </summary>
+        /// <param name="gameField">The game field.</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <returns>The game's average score for that field</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        public async Task<double> GetGameAverageAsync(GameField gameField, DateTime? startDate = null, DateTime? endDate = null, string platform = null)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            return await GetGameFieldValueAsync("getGameAverage", gameField, startDate, endDate, platform);
+        }
+
+        /// <summary>
+        /// Gets the game top score.
+        /// </summary>
+        /// <param name="gameField">The game field.</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <returns>The game's top score for that field</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        public async Task<double> GetGameTopAsync(GameField gameField, DateTime? startDate = null, DateTime? endDate = null, string platform = null)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            return await GetGameFieldValueAsync("getGameTop", gameField, startDate, endDate, platform);
+        }
+
+        /// <summary>
+        /// Gets the game lowest.
+        /// </summary>
+        /// <param name="gameField">The game field.</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <returns>The game's lowest value for that field</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        public async Task<double> GetGameLowestAsync(GameField gameField, DateTime? startDate = null, DateTime? endDate = null, string platform = null)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            return await GetGameFieldValueAsync("getGameLowest", gameField, startDate, endDate, platform);
+        }
+
+        /// <summary>
+        /// Gets the game total.
+        /// </summary>
+        /// <param name="gameField">The game field.</param>
+        /// <param name="startDate">The start date. [Optional]</param>
+        /// <param name="endDate">The end date. [Optional]</param>
+        /// <param name="platform">The platform. [Optional]</param>
+        /// <returns>The game's total value for that field</returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        public async Task<double> GetGameTotalAsync(GameField gameField, DateTime? startDate = null, DateTime? endDate = null, string platform = null)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            return await GetGameFieldValueAsync("getGameTotal", gameField, startDate, endDate, platform);
+        }
+
+        #endregion
+        #endregion
+
+        #region Private/Internal methods
+
+        /// <summary>
+        /// Gets the number from json.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <returns>The number from within the JSON</returns>
+        internal double GetNumberFromJson(string response)
+        {
+            if (response.StartsWith("{\"error\""))
+            {
+                return 0;
+            }
+
+            var colonPoint = response.IndexOf(":", StringComparison.Ordinal);
+            var value = response.Substring(colonPoint + 1, response.Length - colonPoint - 2);
+            double returnValue;
+
+            return double.TryParse(value, out returnValue) ? returnValue : 0;
+        }
+
+        /// <summary>
+        /// Gets the game field value async.
+        /// </summary>
+        /// <param name="methodName">Name of the method.</param>
+        /// <param name="gameField">The game field.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <returns>The value for that field</returns>
+        private async Task<double> GetGameFieldValueAsync(string methodName, GameField gameField, DateTime? startDate = null, DateTime? endDate = null, string platform = null)
+        {
+            var postData = CreatePostData();
+            postData["field"] = gameField.GetDescription();
+
+            if (startDate.HasValue)
+            {
+                postData["start_date"] = startDate.Value.ToString("YYYY-MM-DD");
+            }
+
+            if (endDate.HasValue)
+            {
+                postData["end_date"] = endDate.Value.ToString("YYYY-MM-DD");
+            }
+
+            if (!string.IsNullOrEmpty(platform))
+            {
+                postData["platform"] = platform;
+            }
+
+            var response = await PostTheDataAsync(postData, methodName);
+
+            var value = GetNumberFromJson(response);
+
+            return value;
+        }
+        
+        /// <summary>
+        /// Gets the player from query.
         /// </summary>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
@@ -681,6 +812,22 @@ namespace ScoreoidPortable
             return await PostData<PlayerResponse[]>(postData, "getPlayer", isLogin);
         }
 
+        /// <summary>
+        /// Gets the items from query async.
+        /// </summary>
+        /// <typeparam name="T">The return type</typeparam>
+        /// <param name="usernameParameter">The username parameter.</param>
+        /// <param name="methodName">Name of the method.</param>
+        /// <param name="sortBy">The sort by.</param>
+        /// <param name="orderBy">The order by.</param>
+        /// <param name="startingAt">The starting at.</param>
+        /// <param name="numberToRetrieve">The number to retrieve.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="difficulty">The difficulty.</param>
+        /// <param name="usernames">The usernames.</param>
+        /// <returns>The type of object requested</returns>
         private async Task<T> GetItemsFromQueryAsync<T>(string usernameParameter, 
             string methodName, 
             SortBy? sortBy = null,
@@ -769,11 +916,7 @@ namespace ScoreoidPortable
         /// <exception cref="ScoreoidException"></exception>
         private async Task<T> PostData<T>(Dictionary<string, string> postData, string methodName, bool suppressException = false)
         {
-            var url = GetScoreoidUri(methodName);
-
-            var response = await HttpClient.PostAsync(url, new FormUrlEncodedContent(postData));
-
-            var responseString = await response.Content.ReadAsStringAsync();
+            var responseString = await PostTheDataAsync(postData, methodName);
 
             if (responseString.StartsWith("{\"error\""))
             {
@@ -791,6 +934,17 @@ namespace ScoreoidPortable
             return returnObject;
         }
 
+        private async Task<string> PostTheDataAsync(Dictionary<string, string> postData, string methodName)
+        {
+            var url = GetScoreoidUri(methodName);
+
+            var response = await HttpClient.PostAsync(url, new FormUrlEncodedContent(postData));
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            
+            return responseString;
+        }
+
         /// <summary>
         /// Creates the post data.
         /// </summary>
@@ -803,7 +957,7 @@ namespace ScoreoidPortable
             postData["response"] = "JSON";
             return postData;
         }
-
+        
         #endregion
     }
 }
