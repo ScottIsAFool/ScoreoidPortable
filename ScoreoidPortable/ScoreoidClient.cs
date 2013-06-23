@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace ScoreoidPortable
 {
-    public class ScoreoidClient
+    public class ScoreoidClient : IScoreoidClient
     {
         private const string ScoreoidEndpoint = "https://www.scoreoid.com/api/";
 
