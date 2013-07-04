@@ -207,8 +207,8 @@ namespace ScoreoidPortable
         /// <param name="username">The username.</param>
         /// <param name="score">The score.</param>
         /// <param name="platform">The platform.</param>
-        /// <returns>True if the score was successfully incremented</returns>
-        Task<bool> IncrementScoreAsync(string username, int score, string platform = null);
+        /// <returns>The updated score</returns>
+        Task<double> IncrementScoreAsync(string username, int score, string platform = null);
 
         /// <summary>
         /// Gets the scores.

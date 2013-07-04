@@ -677,7 +677,18 @@ namespace ScoreoidPortable
             return response.ToList();
         }
 
-        public async Task<bool> IncrementScoreAsync(string username, int score, string platform = null)
+        /// <summary>
+        /// Increments the score. If no score exists for a user on the given platform, a new one is created.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="score">The score.</param>
+        /// <param name="platform">The platform.</param>
+        /// <returns>
+        /// The updated score
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">username;The username cannot be null or empty</exception>
+        public async Task<double> IncrementScoreAsync(string username, int score, string platform = null)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
             {
@@ -689,9 +700,11 @@ namespace ScoreoidPortable
                 throw new ArgumentNullException("username", "The username cannot be null or empty");
             }
 
-            var response = await GetItemsFromQueryAsync<object>("username", "incrementScore", usernames: username, score: score, platform: platform);
+            var response = await GetItemsFromQueryAsync<ScoreCountResponse>("username", "incrementScore", usernames: username, score: score, platform: platform);
 
-            return false;
+            double theScore;
+
+            return double.TryParse(response.UpdatedScore, out theScore) ? theScore : 0;
         }
         #endregion
 
@@ -1042,6 +1055,12 @@ namespace ScoreoidPortable
             return returnObject;
         }
 
+        /// <summary>
+        /// Posts the data async.
+        /// </summary>
+        /// <param name="postData">The post data.</param>
+        /// <param name="methodName">Name of the method.</param>
+        /// <returns>THe response string</returns>
         private async Task<string> PostTheDataAsync(Dictionary<string, string> postData, string methodName)
         {
             var url = GetScoreoidUri(methodName);

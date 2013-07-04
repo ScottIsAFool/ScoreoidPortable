@@ -6,5 +6,8 @@ namespace ScoreoidPortable.Entities
     {
         [JsonProperty("scores")]
         public double ScoreCount { get; set; }
+
+        [JsonProperty("score")]
+        public string UpdatedScore { get; set; }
     }
 }
