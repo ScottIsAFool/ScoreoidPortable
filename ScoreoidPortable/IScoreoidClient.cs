@@ -202,6 +202,15 @@ namespace ScoreoidPortable
             int difficulty = 0);
 
         /// <summary>
+        /// Increments the score. If no score exists for a user on the given platform, a new one is created.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="score">The score.</param>
+        /// <param name="platform">The platform.</param>
+        /// <returns>True if the score was successfully incremented</returns>
+        Task<bool> IncrementScoreAsync(string username, int score, string platform = null);
+
+        /// <summary>
         /// Gets the scores.
         /// </summary>
         /// <param name="usernames">The username.</param>
