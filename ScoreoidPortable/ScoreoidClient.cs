@@ -676,6 +676,23 @@ namespace ScoreoidPortable
 
             return response.ToList();
         }
+
+        public async Task<bool> IncrementScoreAsync(string username, int score, string platform = null)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException("username", "The username cannot be null or empty");
+            }
+
+            var response = await GetItemsFromQueryAsync<object>("username", "incrementScore", usernames: username, score: score, platform: platform);
+
+            return false;
+        }
         #endregion
 
         #region Game methods
