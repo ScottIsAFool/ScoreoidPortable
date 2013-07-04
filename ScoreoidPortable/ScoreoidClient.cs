@@ -507,14 +507,14 @@ namespace ScoreoidPortable
         /// Game ID cannot be null or empty</exception>
         /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
         public async Task<List<ScoreItem>> GetScoresAsync(SortBy? sortBy = SortBy.Score,
-                                                            OrderBy? orderBy = OrderBy.Ascending,
-                                                    int? startingAt = null,
-                                                    int? numberToRetrieve = null,
-                                                    DateTime? startDate = null,
-                                                    DateTime? endDate = null,
-                                                    string platform = null,
-                                                    int difficulty = 0,
-                                                    string usernames = null)
+            OrderBy? orderBy = OrderBy.Ascending,
+            int? startingAt = null,
+            int? numberToRetrieve = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            string platform = null,
+            int difficulty = 0,
+            string usernames = null)
         {
             if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
             {
@@ -546,7 +546,7 @@ namespace ScoreoidPortable
         /// Game ID cannot be null or empty</exception>
         /// <exception cref="System.ArgumentNullException">Username cannot be null or empty</exception>
         public async Task<List<ScoreItem>> GetBestScoresAsync(SortBy? sortBy = SortBy.Score,
-                                                            OrderBy? orderBy = OrderBy.Ascending,
+            OrderBy? orderBy = OrderBy.Ascending,
             int? startingAt = null,
             int? numberToRetrieve = null,
             DateTime? startDate = null,
@@ -606,6 +606,75 @@ namespace ScoreoidPortable
             var response = await PostData<AverageScoreResponse>(postData, "getAverageScore");
 
             return response.AverageScore;
+        }
+
+        /// <summary>
+        /// Gets the best scores around a given player.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="startingAt">The starting at.</param>
+        /// <param name="numberToRetrieve">The number to retrieve.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="difficulty">The difficulty.</param>
+        /// <returns>
+        /// The list of score items
+        /// </returns>
+        /// <exception cref="System.NullReferenceException">API Key or Game ID cannot be null or empty</exception>
+        /// <exception cref="System.ArgumentNullException">username;Username cannot be null or empty</exception>
+        public async Task<List<ScoreItem>> GetBestScoresAroundPlayerAsync(string username,
+            int? startingAt = null,
+            int? numberToRetrieve = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            string platform = null,
+            int difficulty = 0)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException("username", "Username cannot be null or empty");
+            }
+
+            var response = await GetItemsFromQueryAsync<ScoreItem[]>("username", "getBestScoresAroundPlayer", null, null, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, username);
+
+            return response.ToList();
+        }
+
+        /// <summary>
+        /// Gets the best scores around a given score.
+        /// </summary>
+        /// <param name="score">The score.</param>
+        /// <param name="startingAt">The starting at.</param>
+        /// <param name="numberToRetrieve">The number to retrieve.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="difficulty">The difficulty.</param>
+        /// <returns>
+        /// The list of score items
+        /// </returns>
+        public async Task<List<ScoreItem>> GetBestScoresAroundScoreAsync(int score,
+            int? startingAt = null,
+            int? numberToRetrieve = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            string platform = null,
+            int difficulty = 0)
+        {
+            if (string.IsNullOrEmpty(ApiKey) || string.IsNullOrEmpty(GameId))
+            {
+                throw new NullReferenceException("API Key or Game ID cannot be null or empty");
+            }
+            
+            var response = await GetItemsFromQueryAsync<ScoreItem[]>(string.Empty, "getBestScoresAroundScore", null, null, startingAt, numberToRetrieve, startDate, endDate, platform, difficulty, score: score);
+
+            return response.ToList();
         }
         #endregion
 
@@ -840,7 +909,10 @@ namespace ScoreoidPortable
         /// <param name="platform">The platform.</param>
         /// <param name="difficulty">The difficulty.</param>
         /// <param name="usernames">The usernames.</param>
-        /// <returns>The type of object requested</returns>
+        /// <param name="score">The score.</param>
+        /// <returns>
+        /// The type of object requested
+        /// </returns>
         private async Task<T> GetItemsFromQueryAsync<T>(string usernameParameter, 
             string methodName, 
             SortBy? sortBy = null,
@@ -851,7 +923,8 @@ namespace ScoreoidPortable
             DateTime? endDate = null,
             string platform = null,
             int difficulty = 0,
-            string usernames = null)
+            string usernames = null,
+            int? score = null)
         {
             var postData = CreatePostData();
 
@@ -901,6 +974,11 @@ namespace ScoreoidPortable
             if (!string.IsNullOrEmpty(usernames))
             {
                 postData[usernameParameter] = usernames;
+            }
+
+            if (score.HasValue)
+            {
+                postData["score"] = score.Value.ToString();
             }
 
             var response = await PostData<T>(postData, methodName);

@@ -160,6 +160,48 @@ namespace ScoreoidPortable
         Task<double> CountBestScoresAsync(DateTime? startDate = null, DateTime? endDate = null, string platform = null, int difficulty = 0);
 
         /// <summary>
+        /// Gets the best scores around a given player.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="startingAt">The starting at.</param>
+        /// <param name="numberToRetrieve">The number to retrieve.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="difficulty">The difficulty.</param>
+        /// <returns>
+        /// The list of score items
+        /// </returns>
+        Task<List<ScoreItem>> GetBestScoresAroundPlayerAsync(string username, 
+            int? startingAt = null,
+            int? numberToRetrieve = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            string platform = null,
+            int difficulty = 0);
+
+        /// <summary>
+        /// Gets the best scores around a given score.
+        /// </summary>
+        /// <param name="score">The score.</param>
+        /// <param name="startingAt">The starting at.</param>
+        /// <param name="numberToRetrieve">The number to retrieve.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="difficulty">The difficulty.</param>
+        /// <returns>
+        /// The list of score items
+        /// </returns>
+        Task<List<ScoreItem>> GetBestScoresAroundScoreAsync(int score,
+            int? startingAt = null,
+            int? numberToRetrieve = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            string platform = null,
+            int difficulty = 0);
+
+        /// <summary>
         /// Gets the scores.
         /// </summary>
         /// <param name="usernames">The username.</param>
