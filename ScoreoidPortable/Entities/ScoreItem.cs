@@ -6,12 +6,27 @@ using PropertyChanged;
 
 namespace ScoreoidPortable.Entities
 {
+    /// <summary>
+    /// This class holds the player and score information for the scores
+    /// </summary>
     [ImplementPropertyChanged]
     public class ScoreItem
     {
+        /// <summary>
+        /// Gets or sets the player.
+        /// </summary>
+        /// <value>
+        /// The player.
+        /// </value>
         [JsonProperty("Player")]
         public Player Player { get; set; }
 
+        /// <summary>
+        /// Gets or sets the score.
+        /// </summary>
+        /// <value>
+        /// The score.
+        /// </value>
         [JsonProperty("Score")]
         public Score Score { get; set; }
     }

@@ -8,114 +8,333 @@ using ScoreoidPortable.Attributes;
 
 namespace ScoreoidPortable.Entities
 {
+    /// <summary>
+    /// The Player class
+    /// </summary>
     [ImplementPropertyChanged]
     public class Player
     {
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        /// <value>
+        /// The username.
+        /// </value>
         [JsonProperty("username"), Description("username")]
         public string Username { get; set; }
 
+        /// <summary>
+        /// Gets or sets the unique id.
+        /// </summary>
+        /// <value>
+        /// The unique id.
+        /// </value>
         [JsonProperty("unique_id"), Description("unique_id")]
         public string UniqueId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the first name.
+        /// </summary>
+        /// <value>
+        /// The first name.
+        /// </value>
         [JsonProperty("first_name"), Description("first_name")]
         public string FirstName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the last name.
+        /// </summary>
+        /// <value>
+        /// The last name.
+        /// </value>
         [JsonProperty("last_name"), Description("last_name")]
         public string LastName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the email.
+        /// </summary>
+        /// <value>
+        /// The email.
+        /// </value>
         [JsonProperty("email"), Description("email")]
         public string Email { get; set; }
 
+        /// <summary>
+        /// Gets or sets the bonus.
+        /// </summary>
+        /// <value>
+        /// The bonus.
+        /// </value>
         [JsonProperty("bonus"), Description("bonus")]
         public int Bonus { get; set; }
 
+        /// <summary>
+        /// Gets or sets the achievements.
+        /// </summary>
+        /// <value>
+        /// The achievements.
+        /// </value>
         [JsonProperty("achievements"), Description("achievements")]
         public string Achievements { get; set; }
 
+        /// <summary>
+        /// Gets or sets the gold.
+        /// </summary>
+        /// <value>
+        /// The gold.
+        /// </value>
         [JsonProperty("gold"), Description("gold")]
         public int Gold { get; set; }
 
+        /// <summary>
+        /// Gets or sets the money.
+        /// </summary>
+        /// <value>
+        /// The money.
+        /// </value>
         [JsonProperty("money"), Description("money")]
         public int Money { get; set; }
 
+        /// <summary>
+        /// Gets or sets the kills.
+        /// </summary>
+        /// <value>
+        /// The kills.
+        /// </value>
         [JsonProperty("kills"), Description("kills")]
         public int Kills { get; set; }
 
+        /// <summary>
+        /// Gets or sets the lives.
+        /// </summary>
+        /// <value>
+        /// The lives.
+        /// </value>
         [JsonProperty("lives"), Description("lives")]
         public int Lives { get; set; }
 
+        /// <summary>
+        /// Gets or sets the time played.
+        /// </summary>
+        /// <value>
+        /// The time played.
+        /// </value>
         [JsonProperty("time_played"), Description("time_played")]
         public int TimePlayed { get; set; }
 
+        /// <summary>
+        /// Gets or sets the unlocked levels.
+        /// </summary>
+        /// <value>
+        /// The unlocked levels.
+        /// </value>
         [JsonProperty("unlocked_levels"), Description("unlocked_levels")]
         public string UnlockedLevels { get; set; }
 
+        /// <summary>
+        /// Gets or sets the unlocked items.
+        /// </summary>
+        /// <value>
+        /// The unlocked items.
+        /// </value>
         [JsonProperty("unlocked_items"), Description("unlocked_items")]
         public string UnlockedItems { get; set; }
 
+        /// <summary>
+        /// Gets or sets the inventory.
+        /// </summary>
+        /// <value>
+        /// The inventory.
+        /// </value>
         [JsonProperty("inventory"), Description("inventory")]
         public string Inventory { get; set; }
 
+        /// <summary>
+        /// Gets or sets the last level.
+        /// </summary>
+        /// <value>
+        /// The last level.
+        /// </value>
         [JsonProperty("last_level"), Description("last_level")]
         public string LastLevel { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current level.
+        /// </summary>
+        /// <value>
+        /// The current level.
+        /// </value>
         [JsonProperty("current_level"), Description("current_level")]
         public string CurrentLevel { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current time.
+        /// </summary>
+        /// <value>
+        /// The current time.
+        /// </value>
         [JsonProperty("current_time"), Description("current_time")]
         public int CurrentTime { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current bonus.
+        /// </summary>
+        /// <value>
+        /// The current bonus.
+        /// </value>
         [JsonProperty("current_bonus"), Description("current_bonus")]
         public int CurrentBonus { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current kills.
+        /// </summary>
+        /// <value>
+        /// The current kills.
+        /// </value>
         [JsonProperty("current_kills"), Description("current_kills")]
         public int CurrentKills { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current achievements.
+        /// </summary>
+        /// <value>
+        /// The current achievements.
+        /// </value>
         [JsonProperty("current_achievements"), Description("current_achievements")]
         public string CurrentAchievements { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current gold.
+        /// </summary>
+        /// <value>
+        /// The current gold.
+        /// </value>
         [JsonProperty("current_gold"), Description("current_gold")]
         public int CurrentGold { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current unlocked levels.
+        /// </summary>
+        /// <value>
+        /// The current unlocked levels.
+        /// </value>
         [JsonProperty("current_unlocked_levels"), Description("current_unlocked_levels")]
         public int CurrentUnlockedLevels { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current unlocked items.
+        /// </summary>
+        /// <value>
+        /// The current unlocked items.
+        /// </value>
         [JsonProperty("current_unlocked_items"), Description("current_unlocked_items")]
         public string CurrentUnlockedItems { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current lives.
+        /// </summary>
+        /// <value>
+        /// The current lives.
+        /// </value>
         [JsonProperty("current_lives"), Description("current_lives")]
         public int CurrentLives { get; set; }
 
+        /// <summary>
+        /// Gets or sets the xp.
+        /// </summary>
+        /// <value>
+        /// The xp.
+        /// </value>
         [JsonProperty("xp"), Description("xp")]
         public string Xp { get; set; }
 
+        /// <summary>
+        /// Gets or sets the energy.
+        /// </summary>
+        /// <value>
+        /// The energy.
+        /// </value>
         [JsonProperty("energy"), Description("energy")]
         public string Energy { get; set; }
 
+        /// <summary>
+        /// Gets or sets the boost.
+        /// </summary>
+        /// <value>
+        /// The boost.
+        /// </value>
         [JsonProperty("boost"), Description("boost")]
         public string Boost { get; set; }
 
+        /// <summary>
+        /// Gets or sets the latitude.
+        /// </summary>
+        /// <value>
+        /// The latitude.
+        /// </value>
         [JsonProperty("latitude"), Description("latitude")]
         public string Latitude { get; set; }
 
+        /// <summary>
+        /// Gets or sets the longtitude.
+        /// </summary>
+        /// <value>
+        /// The longtitude.
+        /// </value>
         [JsonProperty("longtitude"), Description("longtitude")]
         public string Longtitude { get; set; }
 
+        /// <summary>
+        /// Gets or sets the state of the game.
+        /// </summary>
+        /// <value>
+        /// The state of the game.
+        /// </value>
         [JsonProperty("game_state"), Description("game_state")]
         public string GameState { get; set; }
 
+        /// <summary>
+        /// Gets or sets the platform.
+        /// </summary>
+        /// <value>
+        /// The platform.
+        /// </value>
         [JsonProperty("platform"), Description("platform")]
         public string Platform { get; set; }
 
+        /// <summary>
+        /// Gets or sets the rank.
+        /// </summary>
+        /// <value>
+        /// The rank.
+        /// </value>
         [JsonProperty("rank"), Description("rank")]
         public int Rank { get; set; }
 
+        /// <summary>
+        /// Gets or sets the best score.
+        /// </summary>
+        /// <value>
+        /// The best score.
+        /// </value>
         [JsonProperty("best_score"), Description("best_score")]
         public int BestScore { get; set; }
 
+        /// <summary>
+        /// Gets or sets the created date.
+        /// </summary>
+        /// <value>
+        /// The created date.
+        /// </value>
         [JsonProperty("created"), Description("created")]
         public DateTime CreatedDate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the updated date.
+        /// </summary>
+        /// <value>
+        /// The updated date.
+        /// </value>
         [JsonProperty("updated"), Description("updated")]
         public DateTime UpdatedDate { get; set; }
     }
